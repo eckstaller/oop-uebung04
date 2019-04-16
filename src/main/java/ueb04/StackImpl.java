@@ -11,8 +11,28 @@ class StackImpl<T> implements Stack<T> {
 	 */
 	@Override
 	public Iterator<T> iterator() {
-		// Iterator implementieren...
-		throw new UnsupportedOperationException();
+		return new Iterator<T>() {
+			Stack<Element> agenda = new StackImpl<>();
+
+			{
+				Element it = top;
+				while(it!=null){
+					agenda.push(it);
+					it = it.next;
+				}
+			}
+
+			@Override
+			public boolean hasNext() {
+				return agenda.size()!=0;
+			}
+
+			@Override
+			public T next() {
+				if(!hasNext())throw new NoSuchElementException();
+				return agenda.pop().value;
+			}
+		};
 	}
 
 	private class Element {
